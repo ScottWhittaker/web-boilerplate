@@ -1,13 +1,25 @@
+'use strict';
+
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var less = require('gulp-less');
 var reload = browserSync.reload;
 
-var cssDest = './app/css';
-var htmlSource = './app/**/*.html';
-var jsSource = './app/js/**/*.js';
-var lessAppRoot = './app/less/app.less';
-var lessSource = './app/less/**/*.less';
+var config = {
+    css: {
+        dest: './app/css'
+    },
+    html: {
+        source: './app/**/*.html'
+    },
+    js: {
+        source: './app/js/**/*.js'
+    },
+    less: {
+        root: './app/less/app.less',
+        source: './app/less/**/*.less'
+    }
+};
 
 gulp.task('browserSync', function () {
     return browserSync({
@@ -19,24 +31,24 @@ gulp.task('browserSync', function () {
 });
 
 gulp.task('html', function () {
-    return gulp.src(htmlSource)
+    return gulp.src(config.html.source)
         .pipe(reload({stream: true}));
 });
 
 gulp.task('js', function () {
-    return gulp.src(jsSource)
+    return gulp.src(config.js.source)
         .pipe(reload({stream: true}));
 });
 
 gulp.task('less', function () {
-    return gulp.src(lessAppRoot)
+    return gulp.src(config.less.root)
         .pipe(less())
-        .pipe(gulp.dest(cssDest))
+        .pipe(gulp.dest(config.css.dest))
         .pipe(reload({stream: true}));
 });
 
 gulp.task('default', ['less', 'browserSync'], function () {
-    gulp.watch(htmlSource, ['html']);
-    gulp.watch(jsSource, ['js']);
-    gulp.watch(lessSource, ['less']);
+    gulp.watch(config.html.source, ['html']);
+    gulp.watch(config.js.source, ['js']);
+    gulp.watch(config.less.source, ['less']);
 });
